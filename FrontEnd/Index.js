@@ -1,3 +1,34 @@
+if(sessionStorage.getItem('token') == undefined)
+{
+}
+else
+{
+    console.log("connecté");
+    console.log(sessionStorage.getItem('token'));
+
+    let log = document.getElementById('log');
+    log.innerText = 'logout';
+    log.href = '';
+
+    const log2 = document.querySelector("#log");
+    log2.addEventListener("click", function () 
+    {
+        console.log('clikkk'); 
+        sessionStorage.removeItem('token');
+        window.location.href = 'index.html';
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
 fetch('http://localhost:5678/api/works')
     .then(res => res.json())
     // .then (data => console.log(data))
@@ -76,17 +107,26 @@ fetch('http://localhost:5678/api/works')
         });
 
 
-        const btncol = document.querySelectorAll('.btn');
+        let btncol = document.querySelectorAll('.btn');
         btncol.forEach(btn2=>{
-            btn2.addEventListener("click", () =>{
-            document.querySelector('.boutonActif')?.classList.remove;
-            btn2.classList.add('boutonActif');
+            btn2.addEventListener("click", () =>
+            {
+
+                boutonFiltreTous.classList.remove("active");
+                boutonFiltreObjets.classList.remove("active");
+                boutonFiltreAppartement.classList.remove("active");
+                boutonHotelsRestaurants.classList.remove("active");
+
+
+
+                btn2.classList.toggle("active");
             })
         })
 
         
 
-
+        modalContainer.classList.remove("boutonActif");
+        modalContainer2.classList.toggle("active");
 
 
 

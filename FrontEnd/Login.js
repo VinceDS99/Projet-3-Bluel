@@ -1,27 +1,36 @@
-var formConnex = document.getElementById('formulaireConnexion');
-
-formConnex.addEventListener('submit', function(e)
+if(sessionStorage.getItem('token') == undefined)
 {
-    var maConnex = document.getElementById('email');
-    if(maConnex.value.trim() =="")
-    {
-        e.preventDefault();
-        window.alert("Merci d'entrer un mail");
-    }
-
-    else
-    {
-        var maConnex = document.getElementById('password');
-        if(maConnex.value.trim() =="")
-        {
-            e.preventDefault();
-            window.alert("Merci d'entrer un mot de passe")
-        }
-    }
 }
-)
+else
+{
+    console.log("connecté");
+    console.log(sessionStorage.getItem('token'));
+
+    let log = document.getElementById('log');
+    log.innerText = 'logout';
+    log.href = '';
+
+    const log2 = document.querySelector("#log");
+    log2.addEventListener("click", function () 
+    {
+        console.log('clikkk'); 
+        sessionStorage.removeItem('token');
+        window.location.href = 'index.html';
+    });
+}
 
 
+
+
+
+
+
+
+
+
+
+
+var formConnex = document.getElementById('formulaireConnexion');
 
 
 
@@ -49,12 +58,25 @@ formu.addEventListener('submit', event =>{
         console.log(data);
         if(data.message == 'user not found') 
         {
-            window.alert('User not found');
+            window.alert('E-mail incorrect !');
         } 
 
+        else if(data.token === undefined)
+        {
+            console.log('token non defini');
+            console.log(data.message);
+            console.log(data.token)
+
+            window.alert('Mot de passe incorrect !');
+
+        }
         else
         {
             window.location.href = 'Edit.html';
+            console.log('tout est bon');
+            console.log(data.message);
+            console.log(data.token)
+            sessionStorage.setItem('token', data.token)
         }
         // 
     })
