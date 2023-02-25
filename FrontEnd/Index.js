@@ -6,6 +6,8 @@ else
     console.log("connecté");
     console.log(sessionStorage.getItem('token'));
 
+    window.location.href = 'edit.html';
+
     let log = document.getElementById('log');
     log.innerText = 'logout';
     log.href = '';
@@ -17,6 +19,10 @@ else
         sessionStorage.removeItem('token');
         window.location.href = 'index.html';
     });
+
+    let index = document.getElementById('index');
+    index.href = 'edit.html';
+
 }
 
 
@@ -31,13 +37,14 @@ else
 
 fetch('http://localhost:5678/api/works')
     .then(res => res.json())
-    // .then (data => console.log(data))
     .then(data =>{
 
             for(let i = 0; i < data.length; i++)
             {
                 let figure = document.createElement('figure');
+                figure.setAttribute('id', "accueil" + data[i].id);
                 let gallery = document.getElementsByClassName('gallery')[0];
+                
                 gallery.appendChild(figure);
 
                 let images = document.createElement('img');
@@ -122,13 +129,6 @@ fetch('http://localhost:5678/api/works')
                 btn2.classList.toggle("active");
             })
         })
-
-        
-
-        modalContainer.classList.remove("boutonActif");
-        modalContainer2.classList.toggle("active");
-
-
 
 
     

@@ -1,5 +1,6 @@
 if(sessionStorage.getItem('token') == undefined)
 {
+
 }
 else
 {
@@ -17,20 +18,16 @@ else
         sessionStorage.removeItem('token');
         window.location.href = 'index.html';
     });
+
+
+    let index = document.getElementById('index');
+    index.href = 'edit.html';
 }
 
 
 
 
 
-
-
-
-
-
-
-
-var formConnex = document.getElementById('formulaireConnexion');
 
 
 
