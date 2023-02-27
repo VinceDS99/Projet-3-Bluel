@@ -601,3 +601,8 @@ input[type="file"] {
 {
 	cursor: pointer;
 }
+
+.btn
+{
+	cursor: pointer;
+}

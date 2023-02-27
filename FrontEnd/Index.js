@@ -3,9 +3,7 @@ if(sessionStorage.getItem('token') == undefined)
 }
 else
 {
-    console.log("connecté");
-    console.log(sessionStorage.getItem('token'));
-
+    //Si l'utilisateur est connecté, il peut se déconnecter et accède à la page d'édition
     window.location.href = 'edit.html';
 
     let log = document.getElementById('log');
@@ -15,7 +13,6 @@ else
     const log2 = document.querySelector("#log");
     log2.addEventListener("click", function () 
     {
-        console.log('clikkk'); 
         sessionStorage.removeItem('token');
         window.location.href = 'index.html';
     });
@@ -34,30 +31,33 @@ else
 
 
 
-
+//On se connecte à l'API
 fetch('http://localhost:5678/api/works')
     .then(res => res.json())
-    .then(data =>{
-
+    .then(data =>
+    {
+            //Affichage de tous les projets
             for(let i = 0; i < data.length; i++)
             {
+                //On crée un élement 'figure' avec pour parent la div 'gallery'
                 let figure = document.createElement('figure');
-                figure.setAttribute('id', "accueil" + data[i].id);
                 let gallery = document.getElementsByClassName('gallery')[0];
-                
                 gallery.appendChild(figure);
 
+                //On crée un élement 'img' avec pour parent l'element 'figure'
                 let images = document.createElement('img');
                 images.src = data[i].imageUrl;
                 images.alt = data[i].title;
                 images.crossOrigin = 'anonymous';
                 figure.appendChild(images);
-                
+
+                //On crée un élement 'figcaption' avec pour parent l'element 'figure'                
                 let figcaption = document.createElement('figcapiton');
                 figcaption.innerText = data[i].title;
                 figure.appendChild(figcaption);
             }
 
+            //Affichage des projets selon le filtre choisi
             function generation(filtre) 
             {
                 document.querySelector(".gallery").innerHTML = '';
@@ -79,41 +79,41 @@ fetch('http://localhost:5678/api/works')
                 figure.appendChild(figcaption);
                 }
             }
-
+        
+        //Filtre qui fait apparaitre tous les projets
         const boutonFiltreTous = document.querySelector("#boutonTous");
         boutonFiltreTous.addEventListener("click", function () 
         {
             const filtre = data.filter(obj => obj.category.id > 0);
-            console.log(filtre);  
             generation(filtre);
         });
 
+        //Filtre qui fait apparaitre les projets définis comme "objets"
         const boutonFiltreObjets = document.querySelector("#boutonObjets");
         boutonFiltreObjets.addEventListener("click", function () 
         {
             const filtre = data.filter(obj => obj.category.id == 1);          
-            console.log(filtre);  
             generation(filtre);
 
         });
 
+        //Filtre qui fait apparaitre les projets définis comme "Appartements"
         const boutonFiltreAppartement = document.querySelector("#boutonAppartement");
         boutonFiltreAppartement.addEventListener("click", function () 
         {
             const filtre = data.filter(obj => obj.category.id == 2);
-            console.log(filtre);  
             generation(filtre);
         });
 
+        //Filtre qui fait apparaitre les projets définis comme "Hotêl ou restaurant"
         const boutonHotelsRestaurants = document.querySelector("#boutonHotelsRestaurants");
         boutonHotelsRestaurants.addEventListener("click", function () 
         {
             const filtre = data.filter(obj => obj.category.id == 3);
-            console.log(filtre);  
             generation(filtre);
         });
 
-
+        //Lors d'un click sur un bouton, celui-ci devient 'actif' et les autres 'inactif'
         let btncol = document.querySelectorAll('.btn');
         btncol.forEach(btn2=>{
             btn2.addEventListener("click", () =>

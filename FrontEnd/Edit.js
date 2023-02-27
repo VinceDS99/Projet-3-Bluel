@@ -1,12 +1,13 @@
 //Gestion des autorisations d'accés
 if(sessionStorage.getItem('token') == undefined)
 {
-    window.location.href = 'login.html';
+    //Si l'utilisateur n'est pas connecté il n'a pas accés à la page d'édition
     window.alert('Merci de vous connecter pour accéder aux modifications')
+    window.location.href = 'login.html';
 }
 else
 {
-
+    //Si l'utilisateur est connecté, il peut se déconnecter et accède à la page d'édition
     let log = document.getElementById('log');
     log.innerText = 'logout';
     log.href = '';
@@ -25,7 +26,7 @@ else
 
 
 
-
+//Fonction permettant de générer tous les travaux de l'API
 function generation () 
 {
     fetch('http://localhost:5678/api/works')
@@ -65,12 +66,12 @@ function generation ()
             images2.crossOrigin = 'anonymous';
             figure2.appendChild(images2);
 
+
+            //Ajout d'une icône 'poubelle' à côté de chaque image de projet
             let icone  = document.createElement('i');
             icone.setAttribute('class', 'fa-solid fa-trash-can');
             icone.setAttribute('name', 'trash');
             figure2.appendChild(icone);
-
-            
             let trash2 = document.getElementsByClassName('fa-trash-can')[i];
 
             trash2.addEventListener("click", function () 
@@ -88,14 +89,11 @@ function generation ()
                 )
                 .then(data => 
                 {
-                    // let imageSuppr = document.getElementById(data[i].id)
-                    // imageSuppr.parentElement.removeChild(imageSuppr);
-
-                    // let accueilSuppr = document.getElementById("accueil"+ data[i].id)
-                    // accueilSuppr.parentElement.removeChild(accueilSuppr);
-
+                    //On met à jour la page sans l'actualiser
                     document.querySelector(".gallery").innerHTML = '';
                     document.querySelector(".modal1").innerHTML = '';
+
+                    //Re-génération de la page sans le projet supprimé
                     generation();
                 }
                 )
@@ -108,6 +106,7 @@ function generation ()
     )
 }
 
+//Première génération de la page
 generation();
 
 
@@ -138,7 +137,6 @@ function toggleModal2()
     modalContainer.classList.remove("active");
     modalContainer2.classList.toggle("active");
 }
-var img = document.getElementById('image');
 
 
 
@@ -151,9 +149,13 @@ boutonRetourArriere.addEventListener("click", function ()
 });
 
 
-//Appartion de l'image lors de l'ajout
+
+
+//Appartion de l'image lors de l'ajout de projet
+var img = document.getElementById('image');
 img.addEventListener("change", inpute);
-function inpute(){
+function inpute()
+{
     var input = document.getElementById('image');
 
     var fReader = new FileReader();
@@ -164,85 +166,108 @@ function inpute(){
         img.src = event.target.result;
         img.classList.toggle("active");
 
+
         var upload = document.getElementById("upload");
         upload.classList.toggle("active");
-    }
 
+        str = img.src;
+        jpg = str.substring(11, 15);
+        png = str.substring(11,14);
+
+        if(jpg == "jpeg")
+        {
+            console.log("jpeg");
+        } 
+        
+        else if(png == "png")
+        {
+            console.log("png");
+        } 
+        else
+        {
+            var imge = document.getElementById("imagehtml");
+            imge.removeAttribute("src");
+            imge.classList.remove("active");
+            var upl = document.getElementById("upload");
+            upl.classList.remove("active");
+            window.alert("Format d'image invalide !");
+        }
+        }
 }
 
 
 
 
 
-//Envoi du formulaire à l'API
+//Envoi du formulaire d'ajout à l'API
+document.querySelector("form[name='form']").addEventListener("submit", (e) => 
+{
+    var Photo = document.getElementById('image');
+    var Titre = document.getElementById('title');
+    var Categorie = document.getElementById('category');
+    
 
+    //On vérifie que tous les champs sont remplis
+    e.preventDefault();
 
-    document.querySelector("form[name='form']").addEventListener("submit", (e) => 
+    if(Photo.value.trim() == "")
     {
-        var Photo = document.getElementById('image');
-        console.log(Photo.src);
-        console.log(Photo.value);
-        var Titre = document.getElementById('title');
-        var Categorie = document.getElementById('category');
-    
-        e.preventDefault();
-    
-        if(Photo.value.trim() == "")
-        {
-        e.preventDefault();
-        window.alert("Merci d'ajouter une photo");
-        }
-        
-    
-        else if(Titre.value.trim() == "")
-        {
-            e.preventDefault();
-            window.alert("Merci d'ajouter un titre");
-        }
-    
-        else if(Categorie.value.trim() == "")
-        {
-            e.preventDefault();
-            window.alert("Merci d'entrer une catégorie")
-        }
-    
-        else
-        {
-            let file;
-            
-
-
-
-
-
-            const formData = new FormData(e.target);
-            console.log(formData);
-    
-            fetch('http://localhost:5678/api/works',
-            {
-                method: 'POST',
-                headers: 
-                {
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-                },
-                body: formData
-            }
-            )
-            .then(res => res.json())
-            .then(data => 
-            {
-                var modalContainer2 = document.getElementById("modal2");
-                modalContainer2.classList.remove("active");
-
-                // var modal1 = document.getElementById("modal1");
-                // modal1.classList.toggle("active");
-
-                document.querySelector(".gallery").innerHTML = '';
-                document.querySelector(".modal1").innerHTML = '';
-                generation();
-            }
-            )
-        }
+    e.preventDefault();
+    window.alert("Merci d'ajouter une photo");
     }
-    )
+    
+
+    else if(Titre.value.trim() == "")
+    {
+        e.preventDefault();
+        window.alert("Merci d'ajouter un titre");
+    }
+
+    else if(Categorie.value.trim() == "")
+    {
+        e.preventDefault();
+        window.alert("Merci d'entrer une catégorie")
+    }
+
+    else
+    {
+        const formData = new FormData(e.target);
+
+        fetch('http://localhost:5678/api/works',
+        {
+            method: 'POST',
+            headers: 
+            {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+            },
+            body: formData
+        }
+        )
+        .then(res => res.json())
+        .then(data => 
+        {
+            //On fait disparaitre la fenêtre modale après l'ajout du projet
+            var modalContainer2 = document.getElementById("modal2");
+            modalContainer2.classList.remove("active");
+
+            //On met à jour la page sans l'actualiser
+            document.querySelector(".gallery").innerHTML = '';
+            document.querySelector(".modal1").innerHTML = '';
+
+            //On réinitialise le formulaire d'ajout afin qu'il soit à nouveau utilisable
+            var imge = document.getElementById("imagehtml");
+            imge.removeAttribute("src");
+            imge.classList.remove("active");
+            var upl = document.getElementById("upload");
+            upl.classList.remove("active");
+
+            document.getElementById("formProjet").reset();
+
+            //On re-génere les projets avec cette fois le nouveau qui vient d'être ajouté
+            generation();
+        }
+        )
+    }
+}
+)
     

@@ -4,9 +4,7 @@ if(sessionStorage.getItem('token') == undefined)
 }
 else
 {
-    console.log("connecté");
-    console.log(sessionStorage.getItem('token'));
-
+    //Si l'utilisateur est connecté, il peut se déconnecter et accède à la page d'édition
     let log = document.getElementById('log');
     log.innerText = 'logout';
     log.href = '';
@@ -14,7 +12,6 @@ else
     const log2 = document.querySelector("#log");
     log2.addEventListener("click", function () 
     {
-        console.log('clikkk'); 
         sessionStorage.removeItem('token');
         window.location.href = 'index.html';
     });
@@ -37,10 +34,10 @@ formu.addEventListener('submit', event =>{
     event.preventDefault();
 
     const formData = new FormData(formu);
-    console.log(formData);
 
     const data = Object.fromEntries(formData);
-    console.log(data);
+
+    //On envoi le formulaire de connexion à l'API qui nous connecte si l'identifiant et le mot de passe sont correct
 
     fetch('http://localhost:5678/api/users/login',{
         method: 'POST',
@@ -52,7 +49,6 @@ formu.addEventListener('submit', event =>{
     )
     .then(res => res.json())
     .then(data => {
-        console.log(data);
         if(data.message == 'user not found') 
         {
             window.alert('E-mail incorrect !');
@@ -60,19 +56,14 @@ formu.addEventListener('submit', event =>{
 
         else if(data.token === undefined)
         {
-            console.log('token non defini');
-            console.log(data.message);
-            console.log(data.token)
 
             window.alert('Mot de passe incorrect !');
 
         }
         else
         {
+            //Si l'identifiant et le mot de passe sont correct, l'utilisateur est connecté et une session est crée
             window.location.href = 'Edit.html';
-            console.log('tout est bon');
-            console.log(data.message);
-            console.log(data.token)
             sessionStorage.setItem('token', data.token)
         }
         // 
