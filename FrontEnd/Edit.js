@@ -58,21 +58,43 @@ function generation ()
             let modal1 = document.getElementsByClassName('modal1')[0];
             modal1.appendChild(figure2);
 
+            let div = document.createElement('div');
+            div.setAttribute('class', 'imagediv');
+            figure2.appendChild(div);
+
+
             let images2 = document.createElement('img');
             images2.src = data[i].imageUrl;
             images2.alt = data[i].title;
             images2.height = 150;
             images2.width = 100;
             images2.crossOrigin = 'anonymous';
-            figure2.appendChild(images2);
+            div.appendChild(images2);
+
+
 
 
             //Ajout d'une icône 'poubelle' à côté de chaque image de projet
             let icone  = document.createElement('i');
             icone.setAttribute('class', 'fa-solid fa-trash-can');
             icone.setAttribute('name', 'trash');
-            figure2.appendChild(icone);
+            div.appendChild(icone);
             let trash2 = document.getElementsByClassName('fa-trash-can')[i];
+
+            if(i == 0)
+            {
+                let icone  = document.createElement('i');
+                icone.setAttribute('class', 'fa-solid fa-arrows-up-down-left-right');
+                icone.setAttribute('name', 'arrow');
+                div.appendChild(icone);
+            }
+            
+            let figcaption = document.createElement('figcaption');
+            figcaption.innerText = "éditer";
+            figcaption.setAttribute('class', 'figcaption');
+            figure2.appendChild(figcaption);
+
+
 
             trash2.addEventListener("click", function () 
             {

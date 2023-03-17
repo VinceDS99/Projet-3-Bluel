@@ -113,6 +113,8 @@ fetch('http://localhost:5678/api/works')
             generation(filtre);
         });
 
+        boutonTous.classList.toggle("active");
+
         //Lors d'un click sur un bouton, celui-ci devient 'actif' et les autres 'inactif'
         let btncol = document.querySelectorAll('.btn');
         btncol.forEach(btn2=>{
